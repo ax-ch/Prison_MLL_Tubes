@@ -2,19 +2,18 @@
 #include <iostream>
 using namespace std;
 
-void createList(listJudge &L) {
+void createList(listJudge &L){
     L.first = nullptr;
     L.last = nullptr;
 }
 
-adrJudge allocateJudge(string ID, string Name, string License, float AverageSentenceMonths) {
+adrJudge allocateJudge(string ID, string Name, string License, float AverageSentenceMonths){
     adrJudge J = new Judge;
 
     J->info.ID = ID;
     J->info.Name = Name;
     J->info.License = License;
     J->info.AverageSentenceMonths = AverageSentenceMonths;
-
     J->prev = nullptr;
     J->next = nullptr;
     J->firstConvict = nullptr;
@@ -22,14 +21,13 @@ adrJudge allocateJudge(string ID, string Name, string License, float AverageSent
     return J;
 }
 
-adrConvict allocateConvict(string ID, string Name, string Crime, int SentencedMonths) {
+adrConvict allocateConvict(string ID, string Name, string Crime, int SentencedMonths){
     adrConvict C = new Convict;
 
     C->info.ID = ID;
     C->info.Name = Name;
     C->info.Crime = Crime;
     C->info.SentencedMonths = SentencedMonths;
-
     C->next = nullptr;
 
     return C;
@@ -47,15 +45,13 @@ void deleteConvict(listJudge &L, string convictID); // Atallah
 void editJudgeInfo(listJudge &L, string judgeID); // Atallah
 void editConvictInfo(listJudge &L, string convictID); // Atallah
 
-void displayList(listJudge L) {
-    if (L.first == nullptr) {
+void displayList(listJudge L){
+    if (L.first == nullptr){
         cout << "Judge list is empty." << endl;
         return;
     }
-
     adrJudge P = L.first;
     int i = 1;
-
     while (P != nullptr) {
         cout << "Judge " << i << endl;
         cout << "ID       : " << P->info.ID << endl;
@@ -64,7 +60,7 @@ void displayList(listJudge L) {
         cout << "Average Sentence (months): "
              << P->info.AverageSentenceMonths << endl;
         cout << "-------------------------" << endl;
-
+        
         P = P->next;
         i++;
     }
@@ -72,3 +68,4 @@ void displayList(listJudge L) {
 
 float calculateAverageSentencedTime(listJudge L, adrJudge j); // Axella - update avg time every insertConvict
 void displayHighestToLowestAverage(listJudge L); // Axella
+
