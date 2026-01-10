@@ -18,11 +18,15 @@ The system automatically calculates the average sentencing time for each judge a
 🏗️ Data Structures
 
 Judge (Parent)
+
 Attributes: ID, Name, License, and Average Sentence Months.
+
 Pointers: next (to next judge), prev (to previous judge), and firstConvict (to the head of the convict list).
 
 Convict (Child)
+
 Attributes: ID, Name, Crime, and Sentenced Months.
+
 Pointers: next (to the next convict under the same judge).
 
 🚀 Key Features
