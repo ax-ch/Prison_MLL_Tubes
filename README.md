@@ -47,11 +47,13 @@ Ensure you have a C++ compiler installed (e.g., GCC/MinGW).
 - Compile the files:
   
 bash
+
 g++ -o JudgeSystem main.cpp tubes.cpp
 
 - Run the executable:
 
 bash
+
 ./JudgeSystem
 
 
