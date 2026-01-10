@@ -44,11 +44,11 @@ Pointers: next (to the next convict under the same judge).
 
 Ensure you have a C++ compiler installed (e.g., GCC/MinGW).
 
-Compile the files:
+- Compile the files:
 bash
 g++ -o JudgeSystem main.cpp tubes.cpp
 
-Run the executable:
+- Run the executable:
 bash
 ./JudgeSystem
 
