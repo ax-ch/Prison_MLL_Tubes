@@ -37,25 +37,27 @@ struct listJudge {
     adrJudge last;
 };
 
-void createList(listJudge &L); // Kak Alin
+void createList(listJudge &L);
+bool isEmpty(listJudge L);
 
-adrJudge allocateJudge(string ID, string Name, string License, float AverageSentenceMonths); // Kak Alin
-adrConvict allocateConvict(string ID, string Name, string Crime, int SentencedMonths); // Kak Alin
-void insertJudge(listJudge &L, adrJudge j); // Axella
-void insertConvict(listJudge &L, adrConvict c, adrJudge j); // Axella - also updates judge's avg sentenced time
+adrJudge allocateJudge(string ID, string Name, string License);
+adrConvict allocateConvict(string ID, string Name, string Crime, int SentencedMonths);
 
-adrJudge searchJudge(listJudge L, string judgeID); // Atallah
-adrConvict searchConvict(listJudge L, string convictID); // Atallah
+void insertJudge(listJudge &L, adrJudge J);
+void insertConvict(listJudge &L, adrConvict C, adrJudge J);
 
-void deleteJudge(listJudge &L, string judgeID); // Atallah
-void deleteConvict(listJudge &L, string convictID); // Atallah
+adrJudge searchJudge(listJudge L, string judgeID);
+adrConvict searchConvict(listJudge L, string convictID);
+adrJudge searchParent(listJudge L, adrConvict C);
 
-void editJudgeInfo(listJudge &L, string judgeID); // Atallah
-void editConvictInfo(listJudge &L, string convictID); // Atallah
+void deleteJudge(listJudge &L, string judgeID);
+void deleteConvict(listJudge &L, string convictID);
 
-void displayList(listJudge L); // Kak Alin
+void editJudgeInfo(listJudge &L, string judgeID);
+void editConvictInfo(listJudge &L, string convictID);
 
-float calculateAverageSentencedTime(listJudge L, adrJudge j); // Axella - update avg time every insertConvict
-void displayHighestToLowestAverage(listJudge L); // Axella
+void displayList(listJudge L);
+float calculateAverageSentencedTime(adrJudge J);
+void displayHighestToLowestAverage(listJudge L);
 
 #endif // TUBES_H_INCLUDED
