@@ -1,5 +1,6 @@
 #include "TUBES.h"
 #include <iostream>
+
 using namespace std;
 
 void createList(listJudge &L){
@@ -7,13 +8,17 @@ void createList(listJudge &L){
     L.last = nullptr;
 }
 
-adrJudge allocateJudge(string ID, string Name, string License, float AverageSentenceMonths){
+bool isEmpty(listJudge L) {
+    return L.first == nullptr && L.last == nullptr;
+}
+
+adrJudge allocateJudge(string ID, string Name, string License){
     adrJudge J = new Judge;
 
     J->info.ID = ID;
     J->info.Name = Name;
     J->info.License = License;
-    J->info.AverageSentenceMonths = AverageSentenceMonths;
+    J->info.AverageSentenceMonths = 0.0;
     J->prev = nullptr;
     J->next = nullptr;
     J->firstConvict = nullptr;
@@ -33,238 +38,293 @@ adrConvict allocateConvict(string ID, string Name, string Crime, int SentencedMo
     return C;
 }
 
-void insertJudge(listJudge &L, adrJudge j); // Axella
-void insertConvict(listJudge &L, adrConvict c, adrJudge j); // Axella - also updates judge's avg sentenced time
-
-adrJudge searchJudge(listJudge L, string judgeID){
-    adrJudge Judge;
-
-    Judge = L.first;
-    while (Judge != nullptr){
-        if (Judge->info.ID == judgeID){
-            return Judge;
-        }
-        Judge = Judge->next;
-    }
-
-    return nullptr;
-
-}; // Atallah
-
-adrConvict searchConvict(listJudge L, string convictID){
-    adrConvict Convict;
-    adrJudge Judge;
-
-    Judge = L.first;
-    while (Judge != nullptr){
-        Convict = Judge->firstConvict;
-        while (Convict != nullptr){
-            if (Convict->info.ID == convictID){
-                return Convict;
-            }
-            Convict = Convict->next;
-        }
-        Judge = Judge->next;
-    }
-
-    return nullptr;
-
-}; // Atallah
-
-void deleteJudge(listJudge &L, string judgeID){
-    adrJudge Judge = searchJudge(L, judgeID);
-    if (Judge == nullptr) {
-        cout << "Judge not found." << endl;
-        return;
-    }
-
-    adrConvict Convict;
-    Convict = Judge->firstConvict;
-    while (Convict != nullptr){
-        adrConvict temp;
-        temp = Convict;
-        delete temp;
-    }
-
-    if (Judge == L.first){
-        L.first = Judge->next;
-        Judge->next == nullptr;
-        delete Judge;
-    } else if (Judge->next != nullptr) {
-        adrJudge first;
-        first = L.first;
-        while (first->next != Judge){
-            first = first->next;
-        }
-        first->next = Judge->next;
-        Judge->next = nullptr;
-        delete Judge;
+void insertJudge(listJudge &L, adrJudge J) {
+    if (isEmpty(L)) {
+        L.first = J;
+        L.last = J;
     } else {
-        adrJudge first;
-        first = L.first;
-        while (first->next != Judge){
-            first = first->next;
-        }
-        first->next = nullptr;
-        delete Judge;
-    }
-
-}; // Atallah
-void deleteConvict(listJudge &L, string convictID){
-   adrConvict Convict;
-   adrJudge j;
-   adrConvict c = searchConvict(L, convictID);
-   adrJudge Judge;
-
-   if (c == nullptr){
-        cout << "Convict not found." << endl;
-        return;
-   }
-
-    Judge = L.first;
-    while (Judge != nullptr){
-        Convict = Judge->firstConvict;
-        while (Convict != nullptr){
-            if (Convict->info.ID == convictID){
-                j = Judge;
-            }
-            Convict = Convict->next;
-        }
-        Judge = Judge->next;
-    }
-
-    if (j->firstConvict == c){
-        j->firstConvict = c->next;
-        delete c;
-    } else if (c->next != nullptr ){
-        adrConvict helper;
-        helper = j->firstConvict;
-        while (helper->next != c){
-            helper = helper->next;
-        }
-        helper->next = c->next;
-        c->next = nullptr;
-        delete c;
-    } else {
-        adrConvict helper;
-        helper = j->firstConvict;
-        while (helper->next != c){
-            helper = helper->next;
-        }
-        helper->next = nullptr;
-        delete c;
-    }
-
-
-}; // Atallah
-
-void editJudgeInfo(listJudge &L, string judgeID){
-    adrJudge j = searchJudge(L, judgeID);
-    int num;
-    if (j == nullptr){
-        cout << "judge not found." << endl;
-    } else {
-        cout << "Judge Info:" << endl;
-        cout << "1. ID: " << j->info.ID << endl;
-        cout << "2. Name: " << j->info.Name << endl;
-        cout << "3. License: " << j->info.License << endl;
-        cout << "Enter number (1-3): ";
-        cin >> num;
-        cout << endl;
-        if (num == 1){
-            string newID;
-            cout << "Enter new ID: ";
-            cin >> newID;
-            j->info.ID = newID;
-            cout << "ID has Successfully Changed" << endl;
-        } else if (num == 2){
-            string newName;
-            cout << "Enter new Name: ";
-            cin >> newName;
-            j->info.Name = newName;
-            cout << "Name has Successfully Changed" << endl;
-        } else if (num == 3){
-            string newLicense;
-            cout << "Enter new License: ";
-            cin >> newLicense;
-            j->info.License = newLicense;
-            cout << "License has Successfully Changed" << endl;
-        } else {
-            cout << "Invalid Number!" << endl;
-        }
-
-    }
-
-}; // Atallah
-
-void editConvictInfo(listJudge &L, string convictID){
-    adrConvict c = searchConvict(L,convictID);
-    int num;
-    if (c == nullptr){
-        cout << "Convict not found." << endl;
-    } else {
-        cout << "Convict Info:" << endl;
-        cout << "1. ID: " << c->info.ID << endl;
-        cout << "2. Name: " << c->info.Name << endl;
-        cout << "3. Crime: " << c->info.Crime << endl;
-        cout << "4. Sentenced Months: " << c->info.SentencedMonths << endl;
-        cout << "Enter number (1-4): ";
-        cin >> num;
-        cout << endl;
-        if (num == 1){
-            string newID;
-            cout << "Enter new ID: ";
-            cin >> newID;
-            c->info.ID = newID;
-            cout << "ID has Successfully Changed" << endl;
-        } else if (num == 2){
-            string newName;
-            cout << "Enter new Name: ";
-            cin >> newName;
-            c->info.Name = newName;
-            cout << "Name has Successfully Changed" << endl;
-        } else if (num == 3) {
-            string newCrime;
-            cout << "Enter new Crime: ";
-            cin >> newCrime;
-            c->info.Crime = newCrime;
-            cout << "Crime has Successfully Changed" << endl;
-
-        } else if (num == 4){
-            int newSentence;
-            cout << "Enter new Sentence: ";
-            cin >> newSentence;
-            c->info.SentencedMonths = newSentence;
-            cout << "Sentenced Months has Successfully Changed" << endl;
-        } else {
-            cout << "Invalid Number!" << endl;
-        }
-
-    }
-}; // Atallah
-
-void displayList(listJudge L){
-    if (L.first == nullptr){
-        cout << "Judge list is empty." << endl;
-        return;
-    }
-    adrJudge P = L.first;
-    int i = 1;
-    while (P != nullptr) {
-        cout << "Judge " << i << endl;
-        cout << "ID       : " << P->info.ID << endl;
-        cout << "Name     : " << P->info.Name << endl;
-        cout << "License  : " << P->info.License << endl;
-        cout << "Average Sentence (months): "
-             << P->info.AverageSentenceMonths << endl;
-        cout << "-------------------------" << endl;
-        
-        P = P->next;
-        i++;
+        J->prev = L.last;
+        L.last->next = J;
+        L.last = J;
     }
 }
 
-float calculateAverageSentencedTime(listJudge L, adrJudge j); // Axella - update avg time every insertConvict
-void displayHighestToLowestAverage(listJudge L); // Axella
+void insertConvict(listJudge &L, adrConvict C, adrJudge J) {
+    if (J->firstConvict == nullptr) {
+        J->firstConvict = C;
+    } else {
+        C->next = J->firstConvict;
+        J->firstConvict = C;
+    }
 
+    J->info.AverageSentenceMonths = calculateAverageSentencedTime(J);
+}
 
+adrJudge searchJudge(listJudge L, string judgeID){
+    adrJudge J = L.first;
+    adrJudge found = nullptr;
+
+    while (J != nullptr && found == nullptr){
+        if (J->info.ID == judgeID){
+            found = J;
+        } else {
+            J = J->next;
+        }
+    }
+
+    return found;
+}
+
+adrConvict searchConvict(listJudge L, string convictID){
+    adrJudge J = L.first;
+    adrConvict found = nullptr;
+
+    while (J != nullptr && found == nullptr){
+        adrConvict C = J->firstConvict;
+        while (C != nullptr && found == nullptr){
+            if (C->info.ID == convictID){
+                found = C;
+            } else {
+                C = C->next;
+            }
+        }
+        if (found == nullptr) {
+            J = J->next;
+        }
+    }
+
+    return found;
+}
+
+adrJudge searchParent(listJudge L, adrConvict C) {
+    if (C == nullptr) return nullptr;
+
+    adrJudge J = L.first;
+    adrJudge found = nullptr;
+
+    while (J != nullptr && found == nullptr) {
+        adrConvict helper = J->firstConvict;
+        while (helper != nullptr && found == nullptr) {
+            if (helper == C) {
+                found = J;
+            } else {
+                helper = helper->next;
+            }
+        }
+        if (found == nullptr) {
+            J = J->next;
+        }
+    }
+
+    return found;
+}
+
+void deleteJudge(listJudge &L, string judgeID){
+    adrJudge J = searchJudge(L, judgeID);
+
+    if (J == nullptr) {
+        cout << "Judge not found." << endl;
+    } else {
+        adrConvict C = J->firstConvict;
+        while (C != nullptr){
+            adrConvict temp = C;
+            C = C->next;
+            delete temp;
+        }
+
+        if (J == L.first) {
+            if (L.first == L.last) {
+                createList(L);
+            } else {
+                L.first = J->next;
+                L.first->prev = nullptr;
+            }
+        } else if (J == L.last) {
+            L.last = J->prev;
+            L.last->next = nullptr;
+        } else {
+            J->prev->next = J->next;
+            J->next->prev = J->prev;
+        }
+        delete J;
+    }
+}
+
+void deleteConvict(listJudge &L, string convictID){
+    adrConvict C = searchConvict(L, convictID);
+
+    if (C == nullptr){
+        cout << "Convict not found." << endl;
+    } else {
+        adrJudge targetJudge = searchParent(L, C);
+
+        if (targetJudge != nullptr) {
+            if (targetJudge->firstConvict == C){
+                targetJudge->firstConvict = C->next;
+            } else {
+                adrConvict prev = targetJudge->firstConvict;
+                while (prev->next != C){
+                    prev = prev->next;
+                }
+                prev->next = C->next;
+            }
+            delete C;
+            targetJudge->info.AverageSentenceMonths = calculateAverageSentencedTime(targetJudge);
+        }
+    }
+}
+
+void editJudgeInfo(listJudge &L, string judgeID){
+    adrJudge J = searchJudge(L, judgeID);
+    int num;
+
+    if (J == nullptr){
+        cout << "Judge not found." << endl;
+    } else {
+        cout << "Judge Info:" << endl;
+        cout << "ID: " << J->info.ID << endl;
+        cout << "1. Name: " << J->info.Name << endl;
+        cout << "2. License: " << J->info.License << endl;
+        cout << "Enter number (1-2): ";
+        cin >> num;
+
+        if (num == 1){
+            cout << "Enter new Name: "; cin >> J->info.Name;
+            cout << "Name Successfully Changed" << endl;
+        } else if (num == 2){
+            cout << "Enter new License: "; cin >> J->info.License;
+            cout << "License Successfully Changed" << endl;
+        } else {
+            cout << "Invalid Number!" << endl;
+        }
+    }
+}
+
+void editConvictInfo(listJudge &L, string convictID){
+    adrConvict C = searchConvict(L, convictID);
+    int num;
+
+    if (C == nullptr){
+        cout << "Convict not found." << endl;
+    } else {
+        cout << "Convict Info:" << endl;
+        cout << "ID: " << C->info.ID << endl;
+        cout << "1. Name: " << C->info.Name << endl;
+        cout << "2. Crime: " << C->info.Crime << endl;
+        cout << "3. Sentenced Months: " << C->info.SentencedMonths << endl;
+        cout << "Enter number (1-3): ";
+        cin >> num;
+
+        if (num == 1){
+            cout << "Enter new Name: "; cin >> C->info.Name;
+            cout << "Name Successfully Changed" << endl;
+        } else if (num == 2) {
+            cout << "Enter new Crime: "; cin >> C->info.Crime;
+            cout << "Crime Successfully Changed" << endl;
+        } else if (num == 3){
+            cout << "Enter new Sentence: "; cin >> C->info.SentencedMonths;
+
+            adrJudge parent = searchParent(L, C);
+            if (parent != nullptr) {
+                parent->info.AverageSentenceMonths = calculateAverageSentencedTime(parent);
+            }
+
+            cout << "Sentence Changed and Judge Average Updated." << endl;
+        } else {
+            cout << "Invalid Number!" << endl;
+        }
+    }
+}
+
+void displayList(listJudge L){
+    if (isEmpty(L)){
+        cout << "Judge list is empty." << endl;
+    } else {
+        adrJudge J = L.first;
+        int i = 1;
+        while (J != nullptr) {
+            cout << endl;
+            cout << "============================================" << endl;
+            cout << " JUDGE " << i << " DATA" << endl;
+            cout << "============================================" << endl;
+            cout << "  ID              : " << J->info.ID << endl;
+            cout << "  Name            : " << J->info.Name << endl;
+            cout << "  License         : " << J->info.License << endl;
+            cout << "  Avg Sentence    : " << J->info.AverageSentenceMonths << " months" << endl;
+            cout << "--------------------------------------------" << endl;
+            cout << "  >> ASSIGNED CONVICTS:" << endl;
+
+            adrConvict C = J->firstConvict;
+            if (C == nullptr) {
+                cout << "     (No convicts assigned)" << endl;
+            } else {
+                int k = 1;
+                while (C != nullptr) {
+                    cout << "     " << k << ". " << C->info.Name << " (" << C->info.ID << ")" << endl;
+                    cout << "        - Crime    : " << C->info.Crime << endl;
+                    cout << "        - Sentence : " << C->info.SentencedMonths << " months" << endl;
+                    C = C->next;
+                    k++;
+                }
+            }
+            cout << "============================================" << endl;
+
+            J = J->next;
+            i++;
+        }
+    }
+}
+
+float calculateAverageSentencedTime(adrJudge J) {
+    if (J == nullptr || J->firstConvict == nullptr) {
+        return 0.0;
+    }
+
+    float avg = 0.0;
+    int countCases = 0;
+    int totalMonths = 0;
+    adrConvict C = J->firstConvict;
+
+    while (C != nullptr) {
+        countCases++;
+        totalMonths += C->info.SentencedMonths;
+        C = C->next;
+    }
+
+    if (countCases > 0) {
+        avg = (float)totalMonths / countCases;
+    }
+    return avg;
+}
+
+void displayHighestToLowestAverage(listJudge L) {
+    if (isEmpty(L)) {
+        cout << "Judge list is empty." << endl;
+    } else {
+        adrJudge p = L.first;
+
+        while (p != nullptr) {
+            adrJudge maxNode = p;
+            adrJudge q = p->next;
+            while (q != nullptr) {
+                if (q->info.AverageSentenceMonths > maxNode->info.AverageSentenceMonths) {
+                    maxNode = q;
+                }
+                q = q->next;
+            }
+            if (maxNode != p) {
+                auto tempInfo = p->info;
+                p->info = maxNode->info;
+                maxNode->info = tempInfo;
+
+                adrConvict tempConvict = p->firstConvict;
+                p->firstConvict = maxNode->firstConvict;
+                maxNode->firstConvict = tempConvict;
+            }
+            p = p->next;
+        }
+
+        cout << "=== SORTED JUDGE LIST (Highest to Lowest Average) ===" << endl;
+        displayList(L);
+    }
+}
