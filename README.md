@@ -18,28 +18,29 @@ The system automatically calculates the average sentencing time for each judge a
 🏗️ Data Structures
 
 Judge (Parent)
-
 Attributes: ID, Name, License, and Average Sentence Months.
-
 Pointers: next (to next judge), prev (to previous judge), and firstConvict (to the head of the convict list).
 
 Convict (Child)
-
 Attributes: ID, Name, Crime, and Sentenced Months.
-
 Pointers: next (to the next convict under the same judge).
 
 🚀 Key Features
 
 CRUD Operations: Create, Read, Update, and Delete both Judges and Convicts.
+
 Automatic Statistics: The AverageSentenceMonths for a Judge is automatically updated whenever a convict is added, deleted, or their sentence length is edited.
+
 Advanced Search: Search for a convict across all judges or find which judge is responsible for a specific convict (searchParent).
+
 Ranking System: Sort and display judges from the highest to lowest average sentencing time.
 
 📂 File Structure
 
 tubes.h: Header file containing struct definitions and function prototypes.
+
 tubes.cpp: The implementation of all logic (Allocation, Insertion, Deletion, Editing, Searching, and Calculations).
+
 main.cpp: The menu-driven interface for user interaction.
 
 🛠️ How to Run
