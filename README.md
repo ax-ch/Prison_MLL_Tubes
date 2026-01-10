@@ -12,6 +12,7 @@ A C++ implementation of a Multi-Linked List (General Tree/Parent-Child relations
 This system is designed to manage the relationship between Judges and the Convicts they have sentenced. It utilizes two types of linked lists:
 - Judges: A Doubly Linked List (DLL) allowing bidirectional traversal.
 - Convicts: A Singly Linked List (SLL) nested within each Judge node (a 1-to-N relationship).
+  
 The system automatically calculates the average sentencing time for each judge and allows for ranking judges based on their sentencing severity.
 
 🏗️ Data Structures
